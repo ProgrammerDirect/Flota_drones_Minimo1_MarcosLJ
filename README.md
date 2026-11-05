@@ -10,5 +10,5 @@ Actualmente este proyecto tiene lo pedido en el enunciado, es decir, se implemen
 ## Problemas / pendiente
 
 - El front-end que es una herramienta trabajada en DSA no está desarollada y los datos tampoco se guardan en una base de datos, pero lo esencial pedido en el enunciado está operativo.
-- No se valida el rango de latitud/longitud.
 - Se podría aclarar con más logs, mejora de sintaxi, hacer más robusto.
+- Añadir más validaciones

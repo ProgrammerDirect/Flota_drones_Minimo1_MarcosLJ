@@ -45,9 +45,13 @@ public class Dron {
     public String getModelo() { return modelo; }
     public void setModelo(String modelo) { this.modelo = modelo; }
 
+    //Las horas de vuelo del dron se calculan a partir de los planes de vuelo
+    @ApiModelProperty(readOnly = true, value = "Se calcula con los planes de vuelo")
     public double getHorasVuelo() { return horasVuelo; }
     public void setHorasVuelo(double horasVuelo) { this.horasVuelo = horasVuelo; }
 
+    //El campo para mantener el estado del dron según si se está reparando o no se administra de forma interna en el código.
+    @ApiModelProperty(readOnly = true, value = "Este campo se administra interiormente en el código")
     public boolean isEnMantenimiento() { return enMantenimiento; }
     public void setEnMantenimiento(boolean enMantenimiento) { this.enMantenimiento = enMantenimiento; }
 

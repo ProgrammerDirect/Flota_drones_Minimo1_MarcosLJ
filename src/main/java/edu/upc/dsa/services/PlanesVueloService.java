@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(value = "/planesVuelo", description = "Endpoint del servicio de Pilotos")
+@Api(value = "/planesVuelo", description = "Endpoint del servicio de Planes de Vuelo")
 @Path("/planesVuelo")
 
 public class PlanesVueloService {

@@ -38,6 +38,9 @@ public class Piloto {
     public String getApellidos() { return apellidos; }
     public void setApellidos(String apellidos) { this.apellidos = apellidos; }
 
+
+    //Las horas de vuelo del piloto se calculan a partir de los planes de vuelo
+    @ApiModelProperty(readOnly = true, value = "Se calcula con los planes de vuelo")
     public double getHorasVuelo() { return horasVuelo; }
     public void setHorasVuelo(double horasVuelo) { this.horasVuelo = horasVuelo; }
 

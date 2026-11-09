@@ -31,7 +31,7 @@ const pintarDron = d => `
     <p><span class="label">Fabricante:</span> ${d.fabricante}</p>
     <p><span class="label">Modelo:</span> ${d.modelo}</p>
     <p><span class="label">Horas:</span> ${d.horasVuelo}</p>
-    <p><span class="label">Estado:</span> ${d.enMantenimiento ? '🔧 En almacén' : 'Operativo'}</p>
+    <p><span class="label">Estado:</span> ${d.enMantenimiento ? 'En almacén' : 'Operativo'}</p>
     <small>Ref: ${d.id}</small>
 `;
 

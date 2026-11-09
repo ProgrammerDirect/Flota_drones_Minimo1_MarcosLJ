@@ -33,10 +33,11 @@ public interface GestorDrones {
     int numPilotos();
     int numDronesEnAlmacen();
 
-    List<Dron> getTodosDrones();
-    List<Piloto> getTodosPilotos();
-    void eliminarDron(String id);
-    Dron actualizarDron(Dron dron);
+    //Funciones no requeridas por el enunciado.
+    //List<Dron> getTodosDrones();
+    //List<Piloto> getTodosPilotos();
+    //void eliminarDron(String id);
+    //Dron actualizarDron(Dron dron);
 
     void limpiar();
 }

@@ -32,6 +32,7 @@ public class Dron {
         this.modelo = modelo;
     }
 
+    //Getters y setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -54,17 +55,19 @@ public class Dron {
     @ApiModelProperty(hidden = true)
     public List<PlanVuelo> getPlanesVuelo() { return planesVuelo; }
 
-    public void anadirPlanVuelo(PlanVuelo plan) {
+
+    public void anadirPlanVuelo(PlanVuelo plan)
+    {
         planesVuelo.add(plan);
         this.horasVuelo += plan.getHorasEstimadas();
     }
 
     public int numPlanesVuelo() { return planesVuelo.size(); }
 
+    //Método para poder leer el objeto dron.
     @Override
     public String toString() {
-        return "Dron[id=" + id + ", nombre=" + nombre + ", fabricante=" + fabricante
-                + ", modelo=" + modelo + ", horasVuelo=" + horasVuelo
+        return "Dron[id=" + id + ", nombre=" + nombre + ", fabricante=" + fabricante + ", modelo=" + modelo + ", horasVuelo=" + horasVuelo
                 + ", enMantenimiento=" + enMantenimiento + "]";
     }
 }

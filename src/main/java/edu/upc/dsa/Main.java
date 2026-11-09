@@ -63,6 +63,8 @@ public class Main {
             gd.anadirDron("D2", "DronEetac2", "DJI", "Profesional");
             gd.anadirDron("D3", "DronEetac3", "Estudiantes", "Mejorado");
             gd.anadirDron("D4", "DronEetac4", "ProfesorInfoII", "Espionaje");
+            gd.anadirDron("D5", "DronEetac5", "Marcos", "Profesional");
+
 
             gd.anadirPiloto("P1", "Laura", "Perez");
             gd.anadirPiloto("P2", "Jordi", "Alegria");

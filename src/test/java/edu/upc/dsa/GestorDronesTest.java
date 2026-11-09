@@ -18,7 +18,7 @@ public class GestorDronesTest {
 
     @Before
     public void setUp() {
-        this.gd = GestorDronesImpl.getInstance();
+        this.gd = GestorDronesImpl.getInstance(); 
 
         gd.anadirDron("D1", "DronEetac1", "DJI", "Básico");
         gd.anadirDron("D2", "DronEetac2", "DJI", "Profesional");
@@ -55,13 +55,15 @@ public class GestorDronesTest {
     @Test
     public void anadirPilotoTest() {
         Assert.assertEquals(3, gd.numPilotos());
-        gd.anadirPiloto("P4", "Pau", "Jimenez");
+        gd.anadirPiloto("P4", "Marcos", "López");
         Assert.assertEquals(4, gd.numPilotos());
-        Assert.assertEquals("Jimenez", gd.getPiloto("P4").getApellidos());
+        Assert.assertEquals("López", gd.getPiloto("P4").getApellidos());
     }
 
     @Test
-    public void guardarYRepararDronTest() throws Exception {
+    //Verifiar que guardamos en la pila del almacén al dron, al reparar miramos si funciona
+    //correctamente sacarlo de la pila y lo sacamos del estado de mantenimiento.
+    public void mantenimientoDronTest() throws Exception {
         Assert.assertEquals(0, gd.numDronesEnAlmacen());
 
         gd.guardarDronEnAlmacen("D1");
@@ -80,11 +82,13 @@ public class GestorDronesTest {
         Assert.assertEquals(0, gd.numDronesEnAlmacen());
     }
 
+    //Test de la excepción que debe ejecutarse si el almacén está vacío.
     @Test(expected = AlmacenVacioException.class)
     public void repararAlmacenVacioTest() throws Exception {
         gd.repararDron();
     }
 
+    //Test de la excepción que debe ejecutarse si no se encuentra el dron.
     @Test(expected = DronNoEncontradoException.class)
     public void guardarDronInexistenteTest() throws Exception {
         gd.guardarDronEnAlmacen("XX");
@@ -94,7 +98,6 @@ public class GestorDronesTest {
     public void crearPlanVueloTest() throws Exception {
         PlanVuelo p = gd.crearPlanVuelo(plan("D1", "P1", "2026-11-10T10:00", 2));
 
-        Assert.assertNotNull(p.getId());
         Assert.assertEquals(1, gd.getDron("D1").numPlanesVuelo());
         Assert.assertEquals(1, gd.getPiloto("P1").numPlanesVuelo());
         Assert.assertEquals(2, p.getPosiciones().size());
@@ -179,6 +182,6 @@ public class GestorDronesTest {
 
     @Test(expected = PilotoNoEncontradoException.class)
     public void planesVueloPilotoInexistenteTest() throws Exception {
-        gd.getPlanesVueloPiloto("XX");
+        gd.getPlanesVueloPiloto("Inexistente");
     }
 }

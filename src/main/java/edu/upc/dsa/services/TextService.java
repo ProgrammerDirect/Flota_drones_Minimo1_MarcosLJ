@@ -1,3 +1,4 @@
+/**
 package edu.upc.dsa.services;
 
 import io.swagger.annotations.Api;
@@ -11,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 /**
  * Root resource (exposed at "myresource" path)
  */
+
+/**
 @Api(value = "/text", description = "Endpoint to Text Service")
 @Path("text")
 public class TextService {
@@ -21,7 +24,7 @@ public class TextService {
      *
      * @return String that will be returned as a text/plain response.
      */
-
+/**
     @Path("basic")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -44,3 +47,4 @@ public class TextService {
     }
 
 }
+*/

@@ -9,9 +9,6 @@ import org.apache.log4j.Logger;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-/**
- * Fachada (patrón Facade) implementada como Singleton.
- */
 public class GestorDronesImpl implements GestorDrones {
 
     private static GestorDrones instance;
@@ -27,7 +24,7 @@ public class GestorDronesImpl implements GestorDrones {
     {
         drones = new HashMap<>();
         pilotos = new HashMap<>();
-        almacen = new ArrayDeque<>();
+        almacen = new LinkedList<>();
     }
 
     public static GestorDrones getInstance()
@@ -42,9 +39,8 @@ public class GestorDronesImpl implements GestorDrones {
         this.drones.clear();
         this.pilotos.clear();
         this.almacen.clear();
-        logger.info("limpiar() -> fin");
+        logger.info("limpiar() -> las estructuras de datos se han limpiado");
     }
-
 
 
     @Override
@@ -57,7 +53,7 @@ public class GestorDronesImpl implements GestorDrones {
             logger.warn("anadirDron() -> ya existía un dron con id " + dron.getId() + ", se sobrescribe");
 
         drones.put(dron.getId(), dron);
-        logger.info("anadirDron() -> fin, " + dron + ", total drones: " + drones.size());
+        logger.info("anadirDron() -> se ha añadido el dron, " + dron + ", el número total drones es de: " + drones.size());
     }
 
     @Override
@@ -70,7 +66,7 @@ public class GestorDronesImpl implements GestorDrones {
 
         Piloto piloto = new Piloto(id, nombre, apellidos);
         pilotos.put(id, piloto);
-        logger.info("anadirPiloto() -> fin, " + piloto + ", total pilotos: " + pilotos.size());
+        logger.info("anadirPiloto() -> se ha añadido el piloto, " + piloto + ", el número total de pilotos es de: " + pilotos.size());
     }
 
 
@@ -83,7 +79,7 @@ public class GestorDronesImpl implements GestorDrones {
         List<Dron> copia = new ArrayList<>(drones.values());
         copia.sort(Comparator.comparing(Dron::getHorasVuelo).reversed());
 
-        logger.info("getDronesPorHorasVuelo() -> fin, " + copia);
+        logger.info("getDronesPorHorasVuelo() -> Listado de drones ordenado descendientemente por horas de vuelo, " + copia);
         return copia;
     }
 
@@ -95,7 +91,7 @@ public class GestorDronesImpl implements GestorDrones {
         List<Piloto> copia = new ArrayList<>(pilotos.values());
         copia.sort(Comparator.comparing(Piloto::getHorasVuelo).reversed());
 
-        logger.info("getPilotosPorHorasVuelo() -> fin, " + copia);
+        logger.info("getPilotosPorHorasVuelo() -> Listado de pilotos ordenado descendientemente por horas de vuelo, " + copia);
         return copia;
     }
 
@@ -108,7 +104,7 @@ public class GestorDronesImpl implements GestorDrones {
         Dron dron = drones.get(idDron);
         if (dron == null)
         {
-            logger.error("guardarDronEnAlmacen() -> el dron " + idDron + " no existe");
+            logger.error("guardarDronEnAlmacen() -> el dron " + idDron + " no existe ");
             throw new DronNoEncontradoException(idDron);
         }
         if (dron.isEnMantenimiento())
@@ -119,7 +115,7 @@ public class GestorDronesImpl implements GestorDrones {
 
         dron.setEnMantenimiento(true);
         almacen.push(dron);
-        logger.info("guardarDronEnAlmacen() -> fin, " + dron + " guardado, drones en almacén: " + almacen.size());
+        logger.info("guardarDronEnAlmacen() -> el dron " + dron + " se ha guardado en el almacén, y en almacén hay: " + almacen.size() + "drones");
     }
 
     @Override
@@ -135,7 +131,7 @@ public class GestorDronesImpl implements GestorDrones {
         }
 
         dron.setEnMantenimiento(false);
-        logger.info("repararDron() -> fin, reparado y disponible: " + dron + ", quedan en almacén: " + almacen.size());
+        logger.info("repararDron() -> Reparación exitosa, se encuentra reparado y disponible el dron: " + dron + ", aún quedan en almacén: " + almacen.size());
         return dron;
     }
 
@@ -157,14 +153,20 @@ public class GestorDronesImpl implements GestorDrones {
             logger.error("crearPlanVuelo() -> estimación de horas no válida: " + plan.getHorasEstimadas());
             throw new IllegalArgumentException("Las horas estimadas deben ser > 0");
         }
-        try {
+        try
+        {
             plan.inicio();
-        } catch (DateTimeParseException | NullPointerException e) {
+        }
+
+        catch (DateTimeParseException | NullPointerException e)
+
+        {
             logger.error("crearPlanVuelo() -> fecha no válida: " + plan.getFecha() + " (formato esperado yyyy-MM-ddTHH:mm)");
             throw new IllegalArgumentException("Fecha no válida: " + plan.getFecha());
         }
 
         Dron dron = drones.get(plan.getIdDron());
+
         if (dron == null)
         {
             logger.error("crearPlanVuelo() -> el dron " + plan.getIdDron() + " no existe");
@@ -178,29 +180,29 @@ public class GestorDronesImpl implements GestorDrones {
         }
         if (dron.isEnMantenimiento())
         {
-            logger.error("crearPlanVuelo() -> el dron " + dron.getId() + " está en el almacén (no operativo)");
+            logger.error("crearPlanVuelo() -> el dron " + dron.getId() + " está en el almacén y no está operativo");
             throw new DronEnMantenimientoException(dron.getId());
         }
-        for (PlanVuelo otro : dron.getPlanesVuelo())
+        for (PlanVuelo evaluandoPlandeVuelo : dron.getPlanesVuelo())
         {
-            if (plan.seSolapaCon(otro))
+            if (plan.seSolapaCon(evaluandoPlandeVuelo))
             {
-                logger.error("crearPlanVuelo() -> el dron " + dron.getId() + " ya tiene un plan en ese intervalo: " + otro);
-                throw new ConflictoPlanVueloException("El dron " + dron.getId() + " ya tiene un plan de vuelo en ese intervalo");
+                logger.error("crearPlanVuelo() -> el dron " + dron.getId() + " ya tiene un plan en ese intervalo temporal: " + evaluandoPlandeVuelo);
+                throw new ConflictoPlanVueloException("El dron " + dron.getId() + " ya tiene un plan de vuelo en ese intervalo temporal");
             }
         }
-        for (PlanVuelo otro : piloto.getPlanesVuelo())
+        for (PlanVuelo examinandoPlandeVuelo : piloto.getPlanesVuelo())
         {
-            if (plan.seSolapaCon(otro))
+            if (plan.seSolapaCon(examinandoPlandeVuelo))
             {
-                logger.error("crearPlanVuelo() -> el piloto " + piloto.getId() + " ya tiene un plan en ese intervalo: " + otro);
+                logger.error("crearPlanVuelo() -> el piloto " + piloto.getId() + " ya tiene un plan en ese intervalo: " + examinandoPlandeVuelo);
                 throw new ConflictoPlanVueloException("El piloto " + piloto.getId() + " ya tiene un plan de vuelo en ese intervalo");
             }
         }
 
         dron.anadirPlanVuelo(plan);
         piloto.anadirPlanVuelo(plan);
-        logger.info("crearPlanVuelo() -> fin, " + plan + " asignado a " + dron.getId() + " y " + piloto.getId());
+        logger.info("crearPlanVuelo() -> Se ha creado el plan, " + plan + " asignado a " + dron.getId() + " y " + piloto.getId());
         return plan;
     }
 
@@ -217,7 +219,7 @@ public class GestorDronesImpl implements GestorDrones {
         }
 
         List<PlanVuelo> resultado = piloto.getPlanesVuelo();
-        logger.info("getPlanesVueloPiloto() -> fin, " + resultado);
+        logger.info("getPlanesVueloPiloto() -> Los planes de vuelo del piloto, " + idPiloto + " son: "+ resultado);
         return resultado;
     }
 
@@ -234,7 +236,7 @@ public class GestorDronesImpl implements GestorDrones {
         }
 
         List<PlanVuelo> resultado = dron.getPlanesVuelo();
-        logger.info("getPlanesVueloDron() -> fin, " + resultado);
+        logger.info("getPlanesVueloDron() -> Los planes de vuelo del dron " + idDron + "son" + resultado);
         return resultado;
     }
 
@@ -245,7 +247,7 @@ public class GestorDronesImpl implements GestorDrones {
         logger.info("getDron(id=" + id + ")");
         Dron dron = drones.get(id);
         if (dron == null) logger.warn("getDron() -> no existe el dron " + id);
-        logger.info("getDron() -> fin, " + dron);
+        logger.info("getDron() -> Ha sido encontrado el dron , " + dron);
         return dron;
     }
 
@@ -255,28 +257,30 @@ public class GestorDronesImpl implements GestorDrones {
         logger.info("getPiloto(id=" + id + ")");
         Piloto piloto = pilotos.get(id);
         if (piloto == null) logger.warn("getPiloto() -> no existe el piloto " + id);
-        logger.info("getPiloto() -> fin, " + piloto);
+        logger.info("getPiloto() -> Ha sido encontrado el piloto, " + piloto);
         return piloto;
     }
 
     @Override
     public int numDrones() {
-        logger.info("numDrones() -> " + drones.size());
+        logger.info("numDrones() -> El número de drones es:" + drones.size());
         return drones.size();
     }
 
     @Override
     public int numPilotos() {
-        logger.info("numPilotos() -> " + pilotos.size());
+        logger.info("numPilotos() -> El número de pilotos es:" + pilotos.size());
         return pilotos.size();
     }
 
     @Override
     public int numDronesEnAlmacen() {
-        logger.info("numDronesEnAlmacen() -> " + almacen.size());
+        logger.info("numDronesEnAlmacen() -> El número de drones es:" + almacen.size());
         return almacen.size();
     }
 
+    //Las siguientes funciones no son requeridas por el enunciado, aunque resultan útiles para gestionar una flota de drones.
+    /*
     @Override
     public List<Dron> getTodosDrones()
     {
@@ -321,4 +325,5 @@ public class GestorDronesImpl implements GestorDrones {
         }
         return t;
     }
+    */
 }

@@ -28,6 +28,7 @@ public class Piloto {
         this.planesVuelo = new LinkedList<>();
     }
 
+    //Sección de getters y setters.
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -40,7 +41,7 @@ public class Piloto {
     public double getHorasVuelo() { return horasVuelo; }
     public void setHorasVuelo(double horasVuelo) { this.horasVuelo = horasVuelo; }
 
-    // Se oculta en el JSON: los planes se consultan con su propio endpoint
+    // Se oculta en el JSON: los planes de vuelo se consultan en /pilotos/{id}/planesVuelo
     @XmlTransient
     @ApiModelProperty(hidden = true)
     public List<PlanVuelo> getPlanesVuelo() { return planesVuelo; }
@@ -52,6 +53,7 @@ public class Piloto {
 
     public int numPlanesVuelo() { return planesVuelo.size(); }
 
+    //Método para poder leer el objeto Piloto.
     @Override
     public String toString()
     {

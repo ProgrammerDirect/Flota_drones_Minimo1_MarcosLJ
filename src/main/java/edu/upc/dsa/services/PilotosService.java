@@ -31,46 +31,6 @@ public class PilotosService {
         this.gd = GestorDronesImpl.getInstance();
     }
 
-    @GET
-    @ApiOperation(value = "obtener todos los pilotos", notes = "Retorna todos los pilotos")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Piloto.class, responseContainer = "List"),
-    })
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPilotos() {
-        List<Piloto> pilotos = this.gd.getTodosPilotos();
-        GenericEntity<List<Piloto>> entity = new GenericEntity<List<Piloto>>(pilotos) {};
-        return Response.status(201).entity(entity).build();
-    }
-
-    @GET
-    @ApiOperation(value = "pilotos por horas de vuelo", notes = "Pilotos ordenados por horas de vuelo (descendente)")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Piloto.class, responseContainer = "List"),
-    })
-    @Path("/porHorasVuelo")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPilotosPorHorasVuelo() {
-        List<Piloto> pilotos = this.gd.getPilotosPorHorasVuelo();
-        GenericEntity<List<Piloto>> entity = new GenericEntity<List<Piloto>>(pilotos) {};
-        return Response.status(201).entity(entity).build();
-    }
-
-    @GET
-    @ApiOperation(value = "obtener un piloto", notes = "Devuelve un piloto")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Piloto.class),
-            @ApiResponse(code = 404, message = "Piloto no encontrado")
-    })
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getPiloto(@PathParam("id") String id) {
-        Piloto p = this.gd.getPiloto(id);
-        if (p == null) return Response.status(404).build();
-        else return Response.status(201).entity(p).build();
-    }
-
     @POST
     @ApiOperation(value = "añadir un piloto", notes = "Añadir un nuevo piloto")
     @ApiResponses(value = {
@@ -94,6 +54,19 @@ public class PilotosService {
     }
 
     @GET
+    @ApiOperation(value = "pilotos por horas de vuelo", notes = "Pilotos ordenados descendientemente por horas de vuelo")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Piloto.class, responseContainer = "List"),
+    })
+    @Path("/porHorasVuelo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPilotosPorHorasVuelo() {
+        List<Piloto> pilotos = this.gd.getPilotosPorHorasVuelo();
+        GenericEntity<List<Piloto>> entity = new GenericEntity<List<Piloto>>(pilotos) {};
+        return Response.status(201).entity(entity).build();
+    }
+
+    @GET
     @ApiOperation(value = "planes de vuelo de un piloto", notes = "Planes de vuelo asignados a un piloto")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = PlanVuelo.class, responseContainer = "List"),
@@ -110,4 +83,37 @@ public class PilotosService {
             return Response.status(404).entity(e.getMessage()).build();
         }
     }
+
+
+    //No se requiere obtener la lista de pilotos sin criterio de ordenación
+    /*@GET
+    @ApiOperation(value = "obtener todos los pilotos", notes = "Retorna todos los pilotos")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Piloto.class, responseContainer = "List"),
+    })
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPilotos() {
+        List<Piloto> pilotos = this.gd.getTodosPilotos();
+        GenericEntity<List<Piloto>> entity = new GenericEntity<List<Piloto>>(pilotos) {};
+        return Response.status(201).entity(entity).build();
+    }*/
+
+
+    //No se requiere buscar a un piloto por su identificador
+    /*@GET
+    @ApiOperation(value = "obtener un piloto", notes = "Devuelve un piloto")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Piloto.class),
+            @ApiResponse(code = 404, message = "Piloto no encontrado")
+    })
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPiloto(@PathParam("id") String id) {
+        Piloto p = this.gd.getPiloto(id);
+        if (p == null) return Response.status(404).build();
+        else return Response.status(201).entity(p).build();
+    }*/
+
+
 }

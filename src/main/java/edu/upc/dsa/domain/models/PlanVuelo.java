@@ -10,7 +10,6 @@ import java.util.List;
 
 public class PlanVuelo {
 
-    private String id;
     private String idDron;
     private String idPiloto;
     private String fecha;            // formato ISO: "2026-11-10T10:00"
@@ -18,7 +17,6 @@ public class PlanVuelo {
     private List<Posicion> posiciones;
 
     public PlanVuelo() {
-        this.id = RandomUtils.getId();
         this.posiciones = new LinkedList<>();
     }
 
@@ -30,9 +28,7 @@ public class PlanVuelo {
         this.horasEstimadas = horasEstimadas;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
+    //Sección de getters y setters
     public String getIdDron() { return idDron; }
     public void setIdDron(String idDron) { this.idDron = idDron; }
 
@@ -53,6 +49,8 @@ public class PlanVuelo {
     }
 
     // No empiezan por "get" para que no se serialicen en el JSON
+    //Funcioes para determinar cuándo empieza y finaliza un plan de vuelo.
+
     public LocalDateTime inicio() {
         return LocalDateTime.parse(fecha);
     }
@@ -61,16 +59,17 @@ public class PlanVuelo {
         return inicio().plusMinutes(Math.round(horasEstimadas * 60));
     }
 
-    //evitar solapamientos
-    public boolean seSolapaCon(PlanVuelo otro) {
-        return this.inicio().isBefore(otro.fin())
-                && otro.inicio().isBefore(this.fin());
+    //Evitar solapamientos
+    public boolean seSolapaCon(PlanVuelo plan)
+    {
+        return this.inicio().isBefore(plan.fin()) && plan.inicio().isBefore(this.fin());
     }
 
+    //Método para poder leer el objeto PlanVuelo.
     @Override
     public String toString()
     {
-        return "PlanVuelo[id=" + id + ", idDron=" + idDron + ", idPiloto=" + idPiloto
+        return "PlanVuelo[ idDron=" + idDron + ", idPiloto=" + idPiloto
                 + ", fecha=" + fecha + ", horas=" + horasEstimadas + ", posiciones=" + posiciones + "]";
     }
 }
